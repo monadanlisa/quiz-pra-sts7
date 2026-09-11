@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ujian Online Informatika - ASTS Ganjil Kelas 7</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --bg-main: #f0f9ff;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --success: #10b981;
+      --warning: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background: var(--bg-main);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* HEADER BANNER */
+    .app-header {
+      background: linear-gradient(135deg, #0369a1, #0284c7);
+      color: #ffffff;
+      padding: 16px 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .app-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .app-header p {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    /* CARD SYSTEM */
+    .content-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid var(--border-color);
+    }
+
+    /* TOP BAR: PROGRESS & TIMER */
+    .top-info-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+    }
+
+    .info-box-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-box-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #e0f2fe;
+      border-radius: 99px;
+      margin: 0 14px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    /* QUESTION & OPTIONS */
+    .question-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-color);
+      background: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-item.selected {
+      border-color: var(--primary);
+      background-color: #f0f9ff;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .radio-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-left: 10px;
+    }
+
+    .option-item.selected .radio-circle {
+      border-color: var(--primary);
+      background-color: var(--primary);
+    }
+
+    .option-item.selected .radio-circle::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    /* BUTTON CONTROLS */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .btn-nav {
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-prev {
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    .btn-next {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* NAVIGASI GRID SOAL (1-40) */
+    .nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .nav-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .nav-legend {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+    }
+
+    .grid-num {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #f8fafc;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .grid-num.active {
+      border-color: var(--primary);
+      background: #e0f2fe;
+      color: var(--primary);
+    }
+
+    .grid-num.answered {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* SCREEN MANAGEMENT */
+    .screen { display: none; }
+    .screen.active { display: flex; flex-direction: column; gap: 12px; }
+
+    /* FORM SCREEN */
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid var(--border-color); font-size: 15px; outline: none;
+    }
+    .btn-submit-start {
+      width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer;
+    }
+
+    /* OVERLAY ANTI-LENS */
+    #anti-lens-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; z-index: 999999;
+      justify-content: center; align-items: center; color: white; text-align: center; padding: 20px;
+    }
+
+    .footer-text {
+      text-align: center; font-size: 11px; color: var(--text-muted); margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LAYER ANTI GOOGLE LENS -->
+  <div id="anti-lens-overlay">
+    <div>
+      <h2 style="color: #ef4444; margin-bottom: 8px;">⚠️ DILARANG MEMBUKA ASISTEN / LENS!</h2>
+      <p style="font-size: 14px; color: #ccc;">Kembali fokus ke layar ujian untuk melanjutkan.</p>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <div class="app-header">
+      <h1>Ujian Online Informatika</h1>
+      <p>ASTS Ganjil Kelas 7</p>
+    </div>
+
+    <div class="content-body">
+
+      <!-- LAYAR 1: START FORM -->
+      <div id="screen-start" class="screen active">
+        <div class="card">
+          <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" id="nama" placeholder="Masukkan Nama Lengkap..." autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Kelas</label>
+            <select id="kelas">
+              <option value="">-- Pilih Kelas --</option>
+              <option value="7-A">7-A</option>
+              <option value="7-B">7-B</option>
+              <option value="7-C">7-C</option>
+              <option value="7-D">7-D</option>
+              <option value="7-E">7-E</option>
+              <option value="7-F">7-F</option>
+              <option value="7-G">7-G</option>
+              <option value="7-H">7-H</option>
+              <option value="7-I">7-I</option>
+              <option value="7-J">7-J</option>
+            </select>
+          </div>
+          <button class="btn-submit-start" onclick="startQuiz()">Mulai Kerjakan Ujian</button>
+        </div>
+      </div>
+
+      <!-- LAYAR 2: KUIS -->
+      <div id="screen-quiz" class="screen">
+        <!-- BARIS ATAS: SOAL KE & TIMER -->
+        <div class="card top-info-card">
+          <div>
+            <div class="info-box-label">Soal Ke</div>
+            <div class="info-box-val" id="text-progress">1 <span style="font-size: 12px; color: var(--text-muted);">/ 40</span></div>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+          <div style="text-align: right;">
+            <div class="info-box-label">Sisa Waktu</div>
+            <div class="info-box-val" id="text-timer">60:00</div>
+          </div>
+        </div>
+
+        <!-- PERINGATAN VIOLASI -->
+        <div id="warning-box" style="background: #fef2f2; color: #991b1b; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: bold; text-align: center;">
+          Peringatan Violasi: 0 / 2
+        </div>
+
+        <!-- CARD SOAL & OPSI -->
+        <div class="card">
+          <div class="question-title" id="question-text">Loading Soal...</div>
+          <div class="options-list" id="options-container"></div>
+          
+          <div class="controls">
+            <button class="btn-nav btn-prev" id="btn-prev" onclick="navigate(-1)">&lt; Prev</button>
+            <button class="btn-nav btn-next" id="btn-next" onclick="navigate(1)">Next &gt;</button>
+          </div>
+        </div>
+
+        <!-- NAVIGASI GRID SOAL (1-40) -->
+        <div class="card">
+          <div class="nav-header">
+            <span class="nav-title">Navigasi Soal:</span>
+            <span class="nav-legend"><span class="legend-dot"></span> Terjawab</span>
+          </div>
+          <div class="grid-container" id="grid-navigation"></div>
+        </div>
+      </div>
+
+      <!-- LAYAR 3: HASIL SELESAI -->
+      <div id="screen-result" class="screen">
+        <div class="card" style="text-align: center; padding: 24px;">
+          <h2>Ujian Selesai!</h2>
+          <p style="font-size: 14px; color: var(--text-muted); margin-top: 4px;">Data ujian kamu telah dikirim ke server.</p>
+          <div style="font-size: 48px; font-weight: 800; color: var(--primary); margin: 20px 0;" id="res-score">0</div>
+          <p style="font-size: 14px;">Nama: <b id="res-nama">-</b> | Kelas: <b id="res-kelas">-</b></p>
+          <div id="teacher-quote" style="display:none; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 12px; border-radius: 8px; font-weight: 700; margin-top: 16px;">
+            buika dan bu yuyun Bangga sama kamu!
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-text">UPT SMP Negeri 5 Tangerang © 2026</div>
+
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxn58T9I5G3JFQVPEUe7sF8VB0y8JEgTZJxTvnikfjGRew-gdm_wMfj79ThMF0cXM_BPw/exec";
+
+    // MASTER DATABASE (40 SOAL INFORMATIKA KELAS 7 ASTS GANJIL) - TANPA LETTERING A, B, C, D
+    const rawQuizData = [
+      { id: 1, q: "Doni menyusun daftar pekerjaan, menentukan prioritas dan memperkirakan durasi setiap kegiatan sebelum mulai belajar. Tindakan tersebut menunjukkan bahwa Doni ....", opt: ["Memilih menyelesaikan beberapa pekerjaan dalam waktu bersamaan", "Mengutamakan tugas yang dianggap paling mudah terlebih dahulu", "Menerapkan langkah penyelesaian secara runtut terlebih dahulu", "Bekerja berdasarkan kebiasaan tanpa membuat perencanaan"], ans: 2 },
+      { id: 2, q: "Dalam Scratch, perintah 'move 10 step' termasuk dalam kategori blok ....", opt: ["Looks", "Sound", "Events", "Motions"], ans: 3 },
+      { id: 3, q: "Setelah mencuci beras dan menyalakan rice cooker, Siska langsung menyapu lantai sambil menunggu nasi matang. Manfaat dari tindakan Siska adalah ....", opt: ["Menunjukkan struktur data yang efisien", "Menghindari pekerjaan rumah", "Menerapkan pekerjaan paralel untuk efisiensi waktu", "Menggunakan list agar tidak lupa"], ans: 2 },
+      { id: 4, q: "Pernyataan berikut yang menunjukkan pemikiran logis seperti dalam algoritma adalah ....", opt: ["Menyelesaikan tugas berdasarkan tebakan", "Mengurutkan pakaian berdasarkan warna dan jenis sebelum dicuci", "Memasak tanpa membaca resep", "Mengerjakan soal ulangan secara acak"], ans: 1 },
+      { id: 5, q: "Eugenia ingin mengetahui pola pengeluaran bulanan keluarganya. Strategi berpikir komputasional yang tepat adalah ....", opt: ["Menebak pengeluaran bulan depan", "Hanya mencatat pengeluaran terbesar", "Mencatat pengeluaran tanpa kategori", "Mengelompokkan pengeluaran berdasarkan jenis"], ans: 3 },
+      { id: 6, q: "Jika ingin membuat sprite berhenti ketika menyentuh warna merah, jenis blok yang diperlukan adalah ....", opt: ["Looks", "Motions", "Control dan sensing", "Sound"], ans: 2 },
+      { id: 7, q: "Saat sprite menyentuh tepi dan berbalik arah, blok yang tepat digunakan adalah ....", opt: ["If on edge, bounce", "Say 'hi'", "Forever-turn 15 degrees", "Go to mouse pointer"], ans: 0 },
+      { id: 8, q: "Jumlah byte dalam satuan kilobyte (KB) adalah ....", opt: ["1.000", "1.024", "1.048.576", "1.073.741.824"], ans: 1 },
+      { id: 9, q: "Jerry mencatat tinggi badan teman-temannya dalam satuan sentimeter. Data tersebut termasuk jenis ....", opt: ["Visual", "Kualitatif", "Deskriptif", "Kuantitatif"], ans: 3 },
+      { id: 10, q: "Seorang murid menyadari bahwa setiap hari Senin ia selalu lupa membawa buku Matematika, lalu ia membuat pengingat khusus di hari itu. Ia sedang menerapkan konsep ....", opt: ["Abstraksi", "Pengenalan Pola", "Dekomposisi", "Algoritma"], ans: 1 },
+      { id: 11, q: "Setelah data jumlah pengunjung perpustakaan disajikan dalam bentuk grafik, langkah berikutnya adalah memberikan makna terhadap hasil yang terlihat. Kegiatan tersebut disebut ....", opt: ["Pengumpulan data", "Interpretasi data", "Pencatatan data", "Analisa data"], ans: 1 },
+      { id: 12, q: "Nina ingin menyimpan 10 lagu MP3 ke dalam flashdisk. Ukuran setiap lagu sekitar 5 MB. Kapasitas flashdisk minimal yang dibutuhkan Nina adalah ....", opt: ["50 MB", "100 MB", "1 GB", "2 GB"], ans: 0 },
+      { id: 13, q: "Pak Damar menyiapkan data cadangan pada sebuah lembar kerja yang tidak ingin ditampilkan saat presentasi tetapi tetap dapat dibuka kembali. Tindakan yang tepat adalah ....", opt: ["Menghapus lembar kerja tersebut", "Memindahkan lembar kerja ke workbook lain", "Mengganti nama lembar kerja menjadi kosong", "Menyembunyikan lembar kerja dari tampilan tab"], ans: 3 },
+      { id: 14, q: "Referensi sel $A$1 dalam Excel disebut sebagai ....", opt: ["Relatif", "Campuran", "Absolut", "Variabel"], ans: 2 },
+      { id: 15, q: "Fungsi =SUMIF(B2:B10, \">100\") akan ....", opt: ["Menjumlahkan semua data di B2:B10", "Menghitung jumlah sel yang lebih dari 100", "Menjumlahkan hanya nilai yang lebih dari 100 di B2:B10", "Menghitung rata-rata nilai di B2:B10"], ans: 2 },
+      { id: 16, q: "Sebuah tabel berisi daftar nama peserta lomba yang sebagian tercatat lebih dari satu kali karena kesalahan input. Sebelum dilakukan analisis jumlah unik, langkah yang diambil paling tepat adalah ....", opt: ["Menggunakan fitur remove duplicates pada kolom nama", "Membekukan baris judul agar tidak ikut tergeser", "Mengganti sebuah nama menjadi huruf kapital", "Mengurutkan data berdasarkan abjad"], ans: 0 },
+      { id: 17, q: "Sebuah tabel berisi data nilai 200 murid. Guru menemukan beberapa sel kosong memengaruhi hasil analisis. Strategi paling tepat agar perhitungan akurat adalah ....", opt: ["Memverifikasi sumber data dan memastikan hanya data valid yang dihitung", "Menghapus seluruh baris yang memiliki sel kosong", "Mengurutkan data dari terbesar ke terkecil", "Mengganti sel kosong dengan angka nol"], ans: 0 },
+      { id: 18, q: "Seorang bendahara menyalin rumus dari D2 ke D50, tetapi hasil berubah karena referensi bergeser. Penyebab paling logis adalah ....", opt: ["Penggunaan fungsi SUM", "Penggunaan format angka", "Penggunaan referensi absolut", "Penggunaan referensi relatif pada sel tetap"], ans: 3 },
+      { id: 19, q: "Kepala toko ingin mengetahui nilai penjualan terbesar kedua tanpa mengurutkan data. Fungsi yang tepat adalah ....", opt: ["=MAX(range)", "=COUNT(range)", "=LARGE(range;2)", "=AVERAGE(range)"], ans: 2 },
+      { id: 20, q: "Data pada kolom nilai tercampur antara teks dan angka. Dampak paling mungkin adalah ....", opt: ["Fungsi perhitungan dapat menghasilkan nilai keliru", "Fungsi perhitungan menghasilkan nilai absolut", "Grafik akan menyesuaikan secara otomatis", "Semua rumus akan ditolak oleh sistem"], ans: 0 },
+      { id: 21, q: "Jika ingin menampilkan data nilai di atas rata-rata kelas menggunakan filter, langkah awal yang tepat adalah ....", opt: ["Menggabungkan sel", "Mengaktifkan Freeze Panes", "Menghapus nilai di bawah rata-rata", "Menghitung rata-rata terlebih dahulu"], ans: 3 },
+      { id: 22, q: "Sebuah gambar berukuran 2.500 KB ingin dikonversi ke satuan MB. Ukurannya jika dibulatkan ke dua desimal menjadi ....", opt: ["2.44 MB", "2.45 MB", "2.50 MB", "2.55 MB"], ans: 0 },
+      { id: 23, q: "Dalam pengolahan data nilai, guru ingin menampilkan hanya murid yang memperoleh nilai di atas 85 tanpa menghapus data lain. Fitur yang sebaiknya digunakan adalah ....", opt: ["Sort", "Filter", "Wrap Text", "Merge Cells"], ans: 1 },
+      { id: 24, q: "Seorang bendahara kelas menyusun laporan kas bulanan menggunakan Microsoft Excel. Beberapa langkah dilakukan untuk memastikan data akurat. Pernyataan yang benar adalah ....", opt: ["Menggunakan SUM untuk menghitung total pemasukan dan pengeluaran", "Menggunakan Merge Cells pada seluruh tabel agar tampil lebih rapi", "Menggunakan Freeze Panes agar judul kolom tetap terlihat", "Menghapus semua rumus setelah mendapatkan hasil akhir"], ans: 0 },
+      { id: 25, q: "Dalam menyusun algoritma kegiatan lomba kelas, langkah yang paling logis setelah menentukan tujuan adalah ....", opt: ["Langsung menjalankan kegiatan tanpa perencanaan", "Menyusun urutan kegiatan secara sistematis", "Menunggu instruksi tambahan dari teman", "Mengganti tujuan kegiatan"], ans: 1 },
+      { id: 26, q: "Rian ingin memastikan bahwa data yang dimasukkan ke dalam kolom 'Nilai' tidak melebihi 100. Fitur yang paling tepat digunakan adalah ....", opt: ["Conditional Formatting", "Find and Replace", "Data Validation", "Freeze Panes"], ans: 2 },
+      { id: 27, q: "Seorang ketua panitia membagi tugas menjadi bagian konsumsi, perlengkapan, dan dokumentasi agar pekerjaan lebih terarah. Tindakan tersebut menunjukkan penerapan ....", opt: ["Dekomposisi", "Abstraksi", "Simulasi", "Prediksi"], ans: 0 },
+      { id: 28, q: "Roche ingin menampilkan data dari yang tertinggi ke terendah. Langkah yang tepat adalah ....", opt: ["Mengaktifkan Protect Sheet", "Menghapus data yang rendah", "Memilih sort Z to A pada kolom nilai", "Menggunakan fitur Filter dengan urutan A to Z"], ans: 2 },
+      { id: 29, q: "Dalam proyek analisis data, murid diminta menentukan langkah kerja yang sistematis. Pernyataan yang benar adalah ....", opt: ["Mengabaikan data yang tidak sesuai harapan", "Mengumpulkan data dari sumber yang relevan", "Mengolah data menggunakan fungsi yang tepat", "Menyajikan hasil dalam bentuk visual yang informatif"], ans: 1 },
+      { id: 30, q: "Dalam membuat grafik penjualan bulanan, langkah awal yang paling tepat adalah ....", opt: ["Menggunakan jenis grafik sesuai karakter data", "Menambahkan judul grafik agar mudah dipahami", "Memilih data yang relevan sebelum membuat grafik", "Menghapus sumbu nilai agar tampil lebih sederhana"], ans: 2 },
+      { id: 31, q: "Jonathan menyusun tabel kehadiran dan ingin memastikan data tetap konsisten. Pernyataan yang benar adalah ....", opt: ["Menggunakan data validation untuk membatasi pilihan 'Hadir', 'Izin', atau 'Alpa'", "Menggunakan fitur sort untuk mengelompokkan data berdasarkan status", "Menghapus baris yang berisi kesalahan tanpa memeriksa ulang", "Mengisi status kehadiran secara acak agar tabel cepat selesai"], ans: 0 },
+      { id: 32, q: "Dalam penyimpanan data digital, pernyataan yang benar adalah ....", opt: ["1 GB setara dengan 1.024 MB dalam sistem biner", "1 MB selalu sama dengan 1.000 byte", "Konversi satuan diperlukan untuk membandingkan kapasitas", "Kapasitas lebih besar selalu berarti kecepatan transfer lebih tinggi"], ans: 0 },
+      { id: 33, q: "Seorang murid membuat program animasi di Scratch yang terdiri atas beberapa sprite dan latar. Agar program berjalan sesuai rencana, hal yang benar adalah ....", opt: ["Menghapus kondisi percabangan agar program lebih sederhana", "Menggunakan event ketika tombol tertentu ditekan untuk memulai aksi", "Menggunakan blok broadcast untuk mengoordinasikan aksi antar sprite", "Menempatkan seluruh perintah pada satu sprite agar mudah dikendalikan"], ans: 1 },
+      { id: 34, q: "Alexios ingin menyusun jadwal belajar, olahraga, dan tugas rumah agar semua aktivitas selesai tepat waktu. Langkah paling efektif dalam berpikir komputasional adalah ....", opt: ["Melakukan semua aktivitas bersamaan", "Memilih aktivitas favorit terlebih dahulu", "Menunda seluruh aktivitas hingga akhir pekan", "Menyusun daftar kegiatan berdasarkan prioritas"], ans: 3 },
+      { id: 35, q: "Calista ingin sprite bergerak dan berbicara secara berurutan dalam animasi Scratch. Konsep berpikir komputasional yang digunakan adalah ....", opt: ["Pengenalan Pola", "Dekomposisi", "Algoritma", "Abstraksi"], ans: 2 },
+      { id: 36, q: "Thales menambahkan sprite, memberi kostum berbeda, dan memprogramnya agar bergerak cepat saat disentuh. Pemikiran komputasional yang digunakan termasuk ....", opt: ["Looping dan kondisional", "Pengenalan Pola", "Manipulasi data", "Dekomposisi"], ans: 0 },
+      { id: 37, q: "Nikandros ingin membuat sprite bergerak, berbicara, dan memutar suara secara bersamaan dalam satu proyek Scratch. Strategi pemrograman yang benar adalah ....", opt: ["Menempatkan semua perintah dalam satu blok move", "Membuat beberapa skrip terpisah untuk setiap aksi", "Menulis instruksi secara manual di buku catatan", "Menonaktifkan sprite agar tidak bertabrakan"], ans: 1 },
+      { id: 38, q: "Zulfan ingin suara sprite berbunyi hanya saat diklik. Blok yang tepat untuk digunakan adalah ....", opt: ["Forever play sound", "Repeat 10 play sound", "When green flag clicked - play sound", "When this sprite clicked - play sound"], ans: 3 },
+      { id: 39, q: "Berikut yang akan terjadi pertama kali ketika tombol spasi ditekan dalam urutan pemrograman Scratch standar adalah ....", opt: ["Sprite bergerak sebanyak 10 langkah", "Sprite memainkan suara 'cheer' hingga selesai", "Sprite berhenti bergerak karena menyentuh bagian tepi", "Sprite berpindah ke posisi acak"], ans: 0 },
+      { id: 40, q: "Perhatikan pernyataan berikut tentang analisis data! Mengapa data perlu dianalisis sebelum digunakan dalam pengambilan keputusan?", opt: ["Agar data berubah menjadi informasi relevan dan dapat dipertanggungjawabkan", "Agar data bisa langsung dihapus dari sistem", "Agar ukuran file data berkurang drastis", "Agar pengguna tidak perlu membaca isi data"], ans: 0 }
+    ];
+
+    let activeQuizData = [];
+    let namaSiswa = "", kelasSiswa = "";
+    let currentIndex = 0;
+    let userAnswers = {};
+    let violations = 0, maxViolations = 2;
+    let timeRemaining = 60 * 60; // 60 Menit
+    let timerInterval = null;
+    let isSubmitted = false;
+
+    // ALGORITMA SHUFFLE (FISHER-YATES)
+    function shuffleArray(array) {
+      let arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // ACAK SOAL & OPSI JAWABAN
+    function prepareShuffledQuiz() {
+      let shuffled = shuffleArray(rawQuizData);
+      activeQuizData = shuffled.map(item => {
+        let originalOptions = item.opt.map((optText, idx) => ({
+          text: optText,
+          isCorrect: idx === item.ans
+        }));
+        
+        let shuffledOpts = shuffleArray(originalOptions);
+        let correctIndex = shuffledOpts.findIndex(o => o.isCorrect);
+
+        return {
+          id: item.id,
+          q: item.q,
+          options: shuffledOpts.map(o => o.text),
+          correctAnswer: correctIndex
+        };
+      });
+    }
+
+    function startQuiz() {
+      namaSiswa = document.getElementById("nama").value.trim();
+      kelasSiswa = document.getElementById("kelas").value;
+
+      if (!namaSiswa || !kelasSiswa) {
+        alert("Harap isi Nama Lengkap dan Kelas terlebih dahulu!");
+        return;
+      }
+
+      prepareShuffledQuiz();
+      requestFullScreen();
+
+      document.getElementById("screen-start").classList.remove("active");
+      document.getElementById("screen-quiz").classList.add("active");
+
+      startTimer();
+      setupSecurityListeners();
+      renderGridNavigation();
+      renderQuestion();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        let mins = Math.floor(timeRemaining / 60);
+        let secs = timeRemaining % 60;
+        document.getElementById("text-timer").innerText = 
+          `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          alert("Waktu pengerjaan telah habis! Jawaban otomatis terkirim.");
+          submitQuiz("Waktu Habis");
+        }
+      }, 1000);
+    }
+
+    function renderQuestion() {
+      const q = activeQuizData[currentIndex];
+      
+      // Update Top Progress Bar
+      document.getElementById("text-progress").innerHTML = `${currentIndex + 1} <span style="font-size: 12px; color: var(--text-muted);">/ ${activeQuizData.length}</span>`;
+      let progressPercent = ((currentIndex + 1) / activeQuizData.length) * 100;
+      document.getElementById("progress-fill").style.width = `${progressPercent}%`;
+
+      // Render Soal & Opsi
+      document.getElementById("question-text").innerText = `${currentIndex + 1}. ${q.q}`;
+      const container = document.getElementById("options-container");
+      container.innerHTML = "";
+
+      q.options.forEach((optText, idx) => {
+        const item = document.createElement("div");
+        item.className = "option-item" + (userAnswers[q.id] === idx ? " selected" : "");
+        item.innerHTML = `<span>${optText}</span><div class="radio-circle"></div>`;
+        item.onclick = () => {
+          userAnswers[q.id] = idx;
+          renderQuestion();
+          updateGridStatus();
+        };
+        container.appendChild(item);
+      });
+
+      // Update Tombol Next/Prev
+      document.getElementById("btn-prev").style.visibility = currentIndex === 0 ? "hidden" : "visible";
+      if (currentIndex === activeQuizData.length - 1) {
+        document.getElementById("btn-next").innerText = "Kirim Jawaban";
+        document.getElementById("btn-next").style.background = "var(--success)";
+      } else {
+        document.getElementById("btn-next").innerText = "Next >";
+        document.getElementById("btn-next").style.background = "var(--primary)";
+      }
+
+      updateGridStatus();
+    }
+
+    function renderGridNavigation() {
+      const grid = document.getElementById("grid-navigation");
+      grid.innerHTML = "";
+      activeQuizData.forEach((item, idx) => {
+        const btn = document.createElement("div");
+        btn.id = `grid-btn-${idx}`;
+        btn.className = "grid-num";
+        btn.innerText = idx + 1;
+        btn.onclick = () => {
+          currentIndex = idx;
+          renderQuestion();
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function updateGridStatus() {
+      activeQuizData.forEach((item, idx) => {
+        const btn = document.getElementById(`grid-btn-${idx}`);
+        if (!btn) return;
+        btn.className = "grid-num";
+        if (userAnswers[item.id] !== undefined) btn.classList.add("answered");
+        if (idx === currentIndex) btn.classList.add("active");
+      });
+    }
+
+    function navigate(dir) {
+      if (dir === 1 && currentIndex === activeQuizData.length - 1) {
+        if (confirm("Apakah Anda yakin ingin menyelesaikan dan mengirim jawaban?")) {
+          submitQuiz("Selesai Normal");
+        }
+        return;
+      }
+      currentIndex += dir;
+      renderQuestion();
+    }
+
+    function submitQuiz(status = "Selesai Normal") {
+      if (isSubmitted) return;
+      isSubmitted = true;
+      clearInterval(timerInterval);
+
+      let scoreCount = 0;
+      activeQuizData.forEach(q => {
+        if (userAnswers[q.id] === q.correctAnswer) scoreCount++;
+      });
+
+      const totalScore = Math.round((scoreCount / activeQuizData.length) * 100);
+
+      document.getElementById("screen-quiz").classList.remove("active");
+      document.getElementById("screen-result").classList.add("active");
+
+      document.getElementById("res-nama").innerText = namaSiswa;
+      document.getElementById("res-kelas").innerText = kelasSiswa;
+      document.getElementById("res-score").innerText = totalScore;
+
+      if (totalScore >= 75) {
+        document.getElementById("teacher-quote").style.display = "block";
+      }
+
+      const payload = {
+        timestamp: new Date().toLocaleString("id-ID"),
+        nama: namaSiswa,
+        kelas: kelasSiswa,
+        nilai: totalScore,
+        benar: scoreCount,
+        totalSoal: activeQuizData.length,
+        pelanggaran: violations,
+        statusKirim: status,
+        detailJawaban: JSON.stringify(userAnswers)
+      };
+
+      if (SCRIPT_URL && !SCRIPT_URL.includes("GANTI_DENGAN_URL")) {
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).catch(err => console.error(err));
+      }
+    }
+
+    function requestFullScreen() {
+      const doc = document.documentElement;
+      if (doc.requestFullscreen) doc.requestFullscreen();
+      else if (doc.mozRequestFullScreen) doc.mozRequestFullScreen();
+      else if (doc.webkitRequestAnimationFrame) doc.webkitRequestAnimationFrame();
+      else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
+    }
+
+    function registerViolation(reason) {
+      if (isSubmitted) return;
+      violations++;
+      document.getElementById("warning-box").innerText = `Peringatan Violasi: ${violations} / ${maxViolations}`;
+      alert(`PERINGATAN VIOLASI!\nAlasan: ${reason}\nPelanggaran ke-${violations} dari maks ${maxViolations}.`);
+
+      if (violations >= maxViolations) {
+        alert("Batas pelanggaran terlampaui. Kuis otomatis dikirim!");
+        submitQuiz("Diskualifikasi / Auto Submit");
+      }
+    }
+
+    function setupSecurityListeners() {
+      const overlay = document.getElementById("anti-lens-overlay");
+
+      window.addEventListener("blur", () => {
+        overlay.style.display = "flex";
+        registerViolation("Kehilangan fokus layar (Memicu Google Lens / Pindah App).");
+      });
+
+      window.addEventListener("focus", () => {
+        overlay.style.display = "none";
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) overlay.style.display = "flex";
+        else overlay.style.display = "none";
+      });
+
+      history.pushState(null, null, location.href);
+      window.onpopstate = function () {
+        history.pushState(null, null, location.href);
+        registerViolation("Menekan tombol Back.");
+      };
+
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+      document.addEventListener("copy", (e) => e.preventDefault());
+      document.addEventListener("paste", (e) => e.preventDefault());
+      document.addEventListener("cut", (e) => e.preventDefault());
+    }
+  </script>
+</body>
+</html>
